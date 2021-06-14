@@ -22,9 +22,10 @@ router.get('/:id',validateActionId,(req,res,next)=>{
     res.status(200).json(req.action)
 })
 
-router.post('/',validateAction,async(req,res,next)=>{
+router.post('/',validateAction,validateActionId,async(req,res,next)=>{
    try{
-       const result = await Actions.insert({           
+       const result = await Actions.insert({            
+           project_id: req.project_id,              
            description:req.description,
            notes:req.notes
        })
@@ -53,6 +54,7 @@ router.put('/:id',validateActionId,validateAction,(req,res,next)=>{
 router.delete('/:id',validateActionId,async(req,res,next)=>{
     try{
         await Actions.remove(req.params.id)
+        
 
     }catch(error){
         next(error)
